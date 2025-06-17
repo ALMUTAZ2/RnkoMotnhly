@@ -1,16 +1,16 @@
-name: Crypto Bot
+name: Crypto Bot Monthly Report
 
 on:
 schedule:
-  - cron: '0 0 1 * *'  # يوم 1 من كل شهر في منتصف الليل
-workflow_dispatch:  # للتشغيل اليدوي
+  - cron: '0 0 1 * *'  # يوم 1 من كل شهر في منتصف الليل UTC
+workflow_dispatch:  # هذا السطر مهم للتشغيل اليدوي!
 
 jobs:
-run-bot:
+send-crypto-report:
   runs-on: ubuntu-latest
   
   steps:
-  - name: Checkout code
+  - name: Checkout repository
     uses: actions/checkout@v4
     
   - name: Set up Python
@@ -21,7 +21,7 @@ run-bot:
   - name: Install dependencies
     run: |
       python -m pip install --upgrade pip
-      pip install requests aiogram
+      pip install requests
       
   - name: Run crypto bot
     env:
