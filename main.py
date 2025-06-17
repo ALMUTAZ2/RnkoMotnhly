@@ -1,16 +1,10 @@
-import asyncio
 import time
 import os
 from datetime import datetime
 import requests
 
-from aiogram import Bot  # ✅ الصحيح: aiogram
-
 TELEGRAM_BOT_TOKEN = os.getenv('TELEGRAM_BOT_TOKEN')
 TELEGRAM_CHAT_ID = os.getenv('TELEGRAM_CHAT_ID')
-
-# إعداد البوت
-bot = Bot(token=TELEGRAM_BOT_TOKEN)
 
 # العملات المطلوبة
 symbols = ["BTCUSDT", "ETHUSDT", "BNBUSDT", "SOLUSDT", "XRPUSDT"]
@@ -26,8 +20,28 @@ def get_crypto_price(symbol):
       print(f"❌ خطأ في جلب سعر {symbol}: {e}")
       return None
 
-async def send_crypto_report():
-  """إرسال تقرير أسعار العملات"""
+def send_telegram_message(text):
+  """إرسال رسالة عبر Telegram باستخدام requests"""
+  try:
+      url = f"https://api.telegram.org/bot{TELEGRAM_BOT_TOKEN}/sendMessage"
+      payload = {
+          'chat_id': TELEGRAM_CHAT_ID,
+          'text': text,
+          'parse_mode': 'Markdown'
+      }
+      response = requests.post(url, data=payload)
+      if response.status_code == 200:
+          print("✅ تم إرسال التقرير بنجاح")
+          return True
+      else:
+          print(f"❌ خطأ في إرسال الرسالة: {response.text}")
+          return False
+  except Exception as e:
+      print(f"❌ خطأ في إرسال الرسالة: {e}")
+      return False
+
+def main():
+  """الوظيفة الرئيسية"""
   print("🚀 بدء تشغيل بوت العملات...")
   
   report = "📊 **تقرير العملات الشهري - Renko Monthly**\n\n"
@@ -51,20 +65,9 @@ async def send_crypto_report():
   
   report += f"\n⏰ **وقت التحديث**: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}"
   
-  try:
-      await bot.send_message(chat_id=TELEGRAM_CHAT_ID, text=report, parse_mode='Markdown')
-      print("✅ تم إرسال التقرير بنجاح")
-  except Exception as e:
-      print(f"❌ خطأ في إرسال التقرير: {e}")
-
-async def main():
-  """الوظيفة الرئيسية"""
-  try:
-      await send_crypto_report()
-  finally:
-      await bot.session.close()
-      
+  # إرسال التقرير
+  send_telegram_message(report)
   print("✅ تم الانتهاء من التقرير")
 
 if __name__ == "__main__":
-  asyncio.run(main())
+  main()
