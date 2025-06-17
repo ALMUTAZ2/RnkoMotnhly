@@ -11,9 +11,8 @@ from selenium.webdriver.common.by import By
 from aiogram import Bot
 from aiogram.types import FSInputFile
 
-# إعدادات تليجرام (مباشرة في الكود)
-TELEGRAM_BOT_TOKEN = "7762932301:AAHkbmxRKhvjeKV9uJNfh8t382cO0Ty7i2M"
-TELEGRAM_CHAT_ID = "521974594"
+TELEGRAM_BOT_TOKEN = os.getenv('TELEGRAM_BOT_TOKEN')
+TELEGRAM_CHAT_ID = os.getenv('TELEGRAM_CHAT_ID')
 
 # إعداد البوت (نفس الطريقة الأصلية)
 bot = Bot(token=TELEGRAM_BOT_TOKEN)
