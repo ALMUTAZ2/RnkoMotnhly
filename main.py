@@ -4,7 +4,7 @@ import os
 from datetime import datetime
 import requests
 
-from aiogram import Bot
+from aiogram import Bot  # ✅ تصحيح: aiogram وليس aiogran
 
 TELEGRAM_BOT_TOKEN = os.getenv('TELEGRAM_BOT_TOKEN')
 TELEGRAM_CHAT_ID = os.getenv('TELEGRAM_CHAT_ID')
